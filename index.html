@@ -348,7 +348,7 @@ tr.row-new td{box-shadow:inset 0 0 0 9999px rgba(242,189,69,.08)}
 .steps{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:10px}
 @media (max-width:860px){.preview-wrap{grid-template-columns:1fr}.phone-frame{margin:0 auto}}
 </style>
-<script>(function(){try{var B="1793543296";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){try{var B="1793543827";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
 
 <div class="app" id="app">
   <aside class="rail">
@@ -527,7 +527,7 @@ const SUB_VIEWS = ["target","perf"];
 /* pages a read-only Viewer must not see (they can still read reports and move through dates) */
 // Every admin can VIEW every page. Edit rights are per-page:
 //   SUPER_ADMIN edits all · VIEWER edits none · SUB_ADMIN edits the pages granted in perms.edit (no perms set = all).
-const allowedViews = () => VIEWS;
+const allowedViews = () => VIEWS.filter(v => v !== "admins" || (typeof auth !== "undefined" && auth.role === "SUPER_ADMIN"));
 const canEditView = v => {
   if (typeof auth === "undefined" || auth.role === "SUPER_ADMIN") return true;
   if (auth.role === "VIEWER") return false;
