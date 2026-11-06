@@ -318,7 +318,7 @@ main{flex:1;padding:14px max(14px,env(safe-area-inset-right,0px)) 96px max(14px,
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--card);padding:10px 16px;border-radius:12px;font-size:14px;z-index:30;max-width:calc(100vw - 32px)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<script>(function(){try{var B="1793926759";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){try{var B="1793927430";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
 </head><body>
 <div id="root"></div>
 <script>
@@ -391,7 +391,8 @@ const inApp = !!window.ASBAndroid;
 
 /* ── API ── */
 async function rpc(fn, args){
-  const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, { method: "POST", headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(args) });
+  const ac = new AbortController(), tm = setTimeout(() => ac.abort(), 20000);   // a hung request must never block the next refresh
+  let r; try { r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, { method: "POST", signal: ac.signal, headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(args) }); } finally { clearTimeout(tm); }
   if (!r.ok) throw new Error("http " + r.status);
   return r.json();
 }
@@ -1102,7 +1103,7 @@ function androidSync(){
 }
 function toLogin(msg){ try { window.ASBAndroid?.clearSession?.(); } catch {} S.token = null; S.data = null; store.del("asb-token"); S.view = "login"; S.err = msg || ""; S.pin = ""; render(); }
 /* in-app alert: a short double beep + vibration when the office sends something new while the app is open */
-let lastNoticeAt = null, actx = null;
+let actx = null;
 function beep(){
   try { if (window.ASBAndroid && window.ASBAndroid.beep) { window.ASBAndroid.beep(); return; } } catch {}
   try { if (navigator.vibrate) navigator.vibrate([180, 90, 180]); } catch {}
@@ -1112,10 +1113,13 @@ function beep(){
       const t0 = actx.currentTime + d; g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.35, t0 + .02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + .3); o.start(t0); o.stop(t0 + .32); });
   } catch {}
 }
+const knownNotices = new Set(); let noticesPrimed = false;
 function alertNew(m){
-  const top = Math.max(0, ...((m && m.notices) || []).map(n => +n.at || 0));
-  if (lastNoticeAt !== null && top > lastNoticeAt) beep();
-  lastNoticeAt = Math.max(lastNoticeAt || 0, top);
+  const list = (m && m.notices) || [];
+  const fresh = list.filter(n => n.id != null && !knownNotices.has(n.id) && Date.now() - (+n.at || 0) < 120000);
+  list.forEach(n => knownNotices.add(n.id));
+  if (noticesPrimed && fresh.length) beep();
+  noticesPrimed = true;
 }
 async function refresh(force){
   if (!S.token || S.view !== "app" || (S.refreshing && !force)) return;
