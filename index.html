@@ -354,7 +354,7 @@ tr.row-new td{box-shadow:inset 0 0 0 9999px rgba(242,189,69,.08)}
 .steps{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:10px}
 @media (max-width:860px){.preview-wrap{grid-template-columns:1fr}.phone-frame{margin:0 auto}}
 </style>
-<script>(function(){try{var B="1793923573";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){try{var B="1793925071";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
 
 <div class="app" id="app">
   <aside class="rail">
@@ -2207,10 +2207,8 @@ function computePayroll(){
   const R = state.rules, m = state.payMonth;
   const tot = monthRows(m);
   const savedAdj = payDoc()?.adj ?? {};
-  const schedules = [
-    ...Object.entries(state.fines).map(([id,x]) => ({ id, kind: "fine", ...x })),
-    ...Object.entries(state.adv).map(([id,x]) => ({ id, kind: "adv", ...x })),
-  ].filter(s => !s.waived && (+s.remaining||0) > 0 && (s.startMonth||"") <= m).sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+  // nothing is deducted automatically: deductions are entered by hand at month end
+  const schedules = [];
 
   const manual = {};
   for (const [kind, map] of [["fine", state.fines], ["adv", state.adv]]) for (const x of Object.values(map)) for (const h of x.history ?? [])
