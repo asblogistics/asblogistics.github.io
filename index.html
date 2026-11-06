@@ -528,7 +528,7 @@ dialog{border-radius:16px;box-shadow:0 20px 60px rgba(20,24,50,.25)}
  table.pay td:first-child{max-width:130px;white-space:normal}
 }
 </style>
-<script>(function(){try{var B="1794006500";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){try{var B="1794007152";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
 
 <div class="app" id="app">
   <aside class="rail">
@@ -3182,9 +3182,9 @@ document.addEventListener("click", async e => {
       return;
     }
     if (act === "tg-save") {
-      const token = ($("#tgToken").value || "").trim(), chat = ($("#tgChat").value || "").trim(), on = $("#tgOn").checked;
+      const token = ($("#tgToken").value || "").trim(), on = $("#tgOn").checked; let chat = ($("#tgChat").value || "").trim(); if (/^100\d{10}$/.test(chat)) chat = "-" + chat;
       if (on && (!/^\d+:[\w-]{20,}$/.test(token) || !/^-?\d+$/.test(chat))) { toast(t("required")); return; }
-      const achat = ($("#tgaChat")?.value || "").trim();
+      let achat = ($("#tgaChat")?.value || "").trim(); if (/^100\d{10}$/.test(achat)) achat = "-" + achat;   // group IDs start with -100
       if (achat && !/^-?\d+$/.test(achat)) { toast(t("required")); return; }
       await db.doc("config/telegram").set({ token, chat, on, updatedAt: Date.now() });
       await db.doc("config/tgalerts").set({ chat: achat, updatedAt: Date.now() }); toast(t("adjSaved")); return;
