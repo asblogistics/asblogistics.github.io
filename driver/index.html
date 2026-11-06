@@ -363,7 +363,7 @@ main{padding-top:10px;gap:9px}
 .inet-card .big{font-size:17px!important;margin-top:2px!important}
 .inet-rows{margin-top:5px;gap:6px}.inet-rows small{font-size:10.5px}.inet-rows b{font-size:12.5px}
 </style>
-<script>(function(){try{var B="1793997060";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){try{var B="1793997979";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
 </head><body>
 <div id="root"></div>
 <script>
@@ -570,6 +570,7 @@ function vApp(){
   const outstanding = duesOf(m).filter(x => !x.waived).reduce((s, f) => s + (+f.remaining || 0), 0);
   let body = S.sub === "notices" ? vNotices(m) : S.sub === "fuel" ? vFuelPage(m) : S.sub === "changes" ? vChanges() : S.sub === "editp" ? vEditProfile(m) : S.sub === "reports" ? vReports() : S.tab === "home" ? (S.sub === "perf" ? vPerfPage(m) : S.sub === "target" ? vTargetPage(m) : S.sub === "ordd" ? vOrddPage(m) : S.sub === "history" ? vHistoryPage(m) : S.sub === "vehicle" ? vVehiclePage() : S.sub === "vcond" ? vCondPage() : vHome(m)) : S.tab === "fines" ? vDues(m) : S.tab === "salary" ? (S.slip ? vSlip(m, S.slip) : vSalary(m)) : vProfile(m);
   const last = S.lastAt ? new Date(S.lastAt).toLocaleTimeString(lang === "ar" ? "ar-SA" : "en-GB", { hour: "2-digit", minute: "2-digit" }) : "";
+  if (S.token && S.langSent !== S.token + lang) { S.langSent = S.token + lang; try { rpc("driver_set_lang", { p_token: S.token, p_lang: lang }).catch(() => { S.langSent = ""; }); } catch {} }
   if (window.ASBAndroid?.locStart) {
     if (!p.locOn) { if (!S.locStopped) { S.locStopped = true; try { window.ASBAndroid.locStop && window.ASBAndroid.locStop(); } catch {} } }
     else if (!p.locConsent) return vLocConsent();
