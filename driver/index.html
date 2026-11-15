@@ -557,7 +557,7 @@ html[data-skin="lav"] .wa-go{background:linear-gradient(145deg,#B48CFF,#6A3FE0);
 html[data-skin="lav"] .cb.off .wa-lc{background:rgba(123,92,224,.12)}
 #gcMen button:active{background:rgba(123,92,224,.15)}
 </style>
-<script>(function(){try{var B="1794703269";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){try{var B="1794703551";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
 </head><body>
 <div id="root"></div>
 <script>
@@ -1977,6 +1977,7 @@ function bnTestHtml(){
   return `<section class="card"><div style="font-weight:700;margin-bottom:8px">🧪 ${lang === "bn" ? "ব্যানার টেস্ট (শুধু আপনার অ্যাকাউন্টে)" : "Banner test (your account only)"}</div><div style="display:flex;flex-wrap:wrap;gap:8px">${["t3", "t10", "oth", "warn", "jum", "pay"].map((k, i) => `<button class="btn ghost" data-bntest="${k}">${L[i]}</button>`).join("")}</div></section>`;
 }
 function floatCard(){
+  return "";
   const A = window.ASBAndroid; if (!A || !A.floatState) return "";
   let st = "off"; try { st = A.floatState(); } catch {}
   const on = st !== "off";
