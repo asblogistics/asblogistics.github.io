@@ -558,7 +558,7 @@ html[data-skin="lav"] .wa-go{background:linear-gradient(145deg,#B48CFF,#6A3FE0);
 html[data-skin="lav"] .cb.off .wa-lc{background:rgba(123,92,224,.12)}
 #gcMen button:active{background:rgba(123,92,224,.15)}
 </style>
-<script>(function(){try{var B="1794811022";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){try{var B="1794811971";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
 </head><body>
 <div id="root"></div>
 <script>
@@ -2092,7 +2092,8 @@ let lastPing = 0;
 async function ping(){
   if (!S.token || S.view !== "app" || document.visibilityState !== "visible" || Date.now() - lastPing < 50000) return;
   lastPing = Date.now();
-  try { await rpc("driver_ping", { p_token: S.token }); } catch {}
+  let v = 0; try { v = parseInt(window.ASBAndroid?.appVer?.()) || 0; } catch {}
+  try { await rpc("driver_ping", v ? { p_token: S.token, p_ver: v } : { p_token: S.token }); } catch {}
 }
 setInterval(ping, 60000);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { refresh(); ping(); } });
