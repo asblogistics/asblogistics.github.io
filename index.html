@@ -726,7 +726,7 @@ html[data-skin="lav"] .kpi{background:rgba(243,237,255,.4)!important}
 @keyframes lgl{0%,100%{transform:translateY(0) scale(1);opacity:.6}50%{transform:translateY(-12px) scale(1.07);opacity:.85}}
 html[data-skin="lav"]::before{animation:lgl 7s ease-in-out infinite}
 </style>
-<script>(function(){try{var B="1794928871";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
+<script>(function(){try{var B="1795132943";fetch("v.txt?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():null}).then(function(t){if(t){t=(t||"").trim();if(t&&t!==B&&location.search.indexOf("v="+t)<0){location.replace(location.pathname+"?v="+t)}}}).catch(function(){})}catch(e){}})();</script>
 
 <div class="app" id="app">
   <aside class="rail">
@@ -2693,10 +2693,10 @@ const xMine = () => xAccts().find(a => !a.main && !a.personal && String(a.email 
 const xCanSpend = id => xIsSuper() || (canEditView("expenses") && xMine()?.id === id);
 const xTx = () => Object.entries(state.ctx || {}).map(([id, x]) => ({ ...x, id }));
 const xFromSel = (name, def) => { const ac = xAccts().filter(a => xCanSpend(a.id) && !xHidden(a.id)); if (!ac.length) return ""; const d = def ?? (xMine()?.id || "");
-  return `<label class="f full">💳 ${t("xf_from")}<select class="input" name="${name}"><option value="">${t("xf_none")}</option>${ac.map(a => `<option value="${esc(a.id)}" ${a.id === d ? "selected" : ""}>${esc(xAName(a.id))} · ${fmt(xStat(a.id, "").close)} ${t("sar")}</option>`).join("")}</select></label>`; };
+  return `<label class="f full">💳 ${t("xf_from")}<select class="input" name="${name}"><option value="">${t("xf_none")}</option>${ac.map(a => `<option value="${esc(a.id)}" ${a.id === d ? "selected" : ""}>${esc(xAName(a.id))}${a.personal ? "" : " · " + fmt(xStat(a.id, "").close) + " " + t("sar")}</option>`).join("")}</select></label>`; };
 async function xPay(acct, amount, date, cat, place, note, extra){   /* record a spend from an admin account (loan / internet) */
   if (!acct) return; if (!xCanSpend(acct)) fail(t("required"));
-  if (xStat(acct, "").close < amount) fail(t("xf_low"));
+  if (acct !== "main" && acct !== "akash" && xStat(acct, "").close < amount) fail(t("xf_low"));   /* main card and Akash’s own pocket have no spending limit */
   await db.doc("ctx/e" + uid()).set({ kind: "SPEND", acct, amount, date: date || todayKey(), cat, place, note: note || "", receipt: null, by: xMe(), createdAt: Date.now(), updatedAt: Date.now(), ...(extra || {}) });
 }
 const xSum = (l, f) => r2(l.filter(f || (() => true)).reduce((s, x) => s + (+x.amount || 0), 0));
